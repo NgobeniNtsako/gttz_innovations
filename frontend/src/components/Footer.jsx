@@ -11,12 +11,14 @@ const Footer = () => {
   const scrollTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   return (
-    <footer className="relative bg-zinc-950 text-zinc-300 overflow-hidden">
+    <footer
+      className="relative border-t border-white/5 text-zinc-300 overflow-hidden"
+      style={{ backgroundColor: '#1e1f22' }}
+    >
       <div className="absolute -top-40 right-1/4 w-[400px] h-[400px] rounded-full bg-amber-500/10 blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-10 pt-20 pb-10 relative">
         <div className="grid md:grid-cols-2 lg:grid-cols-12 gap-10 mb-12">
-          {/* Brand */}
           <div className="lg:col-span-4">
             <div className="flex items-center gap-4 mb-5">
               <Logo size={64} />
@@ -45,7 +47,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Nav */}
           <div className="lg:col-span-2">
             <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Navigate</h4>
             <ul className="space-y-3">
@@ -62,7 +63,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Services */}
           <div className="lg:col-span-3">
             <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Services</h4>
             <ul className="space-y-3">
@@ -79,7 +79,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact */}
           <div className="lg:col-span-3">
             <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Contact</h4>
             <ul className="space-y-4 text-sm">
@@ -120,7 +119,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-zinc-500">
             © {new Date().getFullYear()} GTTZ Innovations. All rights reserved.

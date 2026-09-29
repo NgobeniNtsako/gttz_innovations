@@ -8,13 +8,14 @@ import Services from './components/Services';
 import WhyChooseUs from './components/WhyChooseUs';
 import Projects from './components/Projects';
 import Testimonials from './components/Testimonials';
+import CtaBand from './components/CtaBand';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import WhatsAppFloat from './components/WhatsAppFloat';
 import { Toaster } from './components/ui/toaster';
 
 const Home = () => (
-  <div className="min-h-screen bg-stone-50 text-zinc-900">
+  <div className="min-h-screen text-zinc-100" style={{ backgroundColor: '#2b2d31' }}>
     <Navbar />
     <main>
       <Hero />
@@ -23,6 +24,7 @@ const Home = () => (
       <WhyChooseUs />
       <Projects />
       <Testimonials />
+      <CtaBand />
       <Contact />
     </main>
     <Footer />

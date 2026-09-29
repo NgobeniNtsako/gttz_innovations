@@ -1,9 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
+:root {
+  --bg: #2b2d31;
+  --bg-alt: #232428;
+  --bg-card: #35373c;
+  --border: #3f4147;
+  --text: #e4e4e7;
+  --text-muted: #a1a1aa;
+}
+
 .App {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: #fafaf9;
-  color: #18181b;
+  background-color: #2b2d31;
+  color: #e4e4e7;
 }
 
 .font-display {
@@ -13,36 +22,23 @@
 
 html {
   scroll-behavior: smooth;
-  background-color: #fafaf9;
+  background-color: #2b2d31;
 }
 
 body {
-  background-color: #fafaf9;
-  color: #18181b;
+  background-color: #2b2d31;
+  color: #e4e4e7;
 }
 
 /* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  background: #f5f5f4;
-}
-::-webkit-scrollbar-thumb {
-  background: #a8a29e;
-  border-radius: 5px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #b45309;
-}
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #232428; }
+::-webkit-scrollbar-thumb { background: #52525b; border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
 
 /* Selection */
-::selection {
-  background: #b45309;
-  color: #fff;
-}
+::selection { background: #f59e0b; color: #18181b; }
 
-/* Subtle animation */
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -51,14 +47,37 @@ body {
 
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  50% { transform: translateY(-10px); }
 }
-.animate-float { animation: float 4s ease-in-out infinite; }
+.animate-float { animation: float 5s ease-in-out infinite; }
 
-/* Logo badge - dark disc holding the white brand mark */
-.logo-badge {
-  background: radial-gradient(circle at 30% 30%, #27272a 0%, #09090b 70%);
-  box-shadow: 0 6px 20px -6px rgba(180, 83, 9, 0.35),
-              0 2px 6px rgba(0, 0, 0, 0.15),
-              inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+/* Logo halo (glow) — used behind the white brand mark on dark bg */
+.logo-halo {
+  background: radial-gradient(circle at center,
+    rgba(245, 158, 11, 0.35) 0%,
+    rgba(245, 158, 11, 0.15) 35%,
+    rgba(245, 158, 11, 0.02) 65%,
+    transparent 80%);
+  box-shadow: 0 0 40px -8px rgba(245, 158, 11, 0.35);
+}
+
+/* Reusable card surface */
+.surface-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%),
+              #35373c;
+  border: 1px solid #3f4147;
+}
+.surface-card:hover { border-color: rgba(245, 158, 11, 0.5); }
+
+/* Section divider band with picture */
+.picture-band {
+  position: relative;
+  isolation: isolate;
+}
+.picture-band::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(43,45,49,0.7) 0%, rgba(43,45,49,0.85) 100%);
+  z-index: -1;
 }
