@@ -14,7 +14,7 @@ import WhatsAppFloat from './components/WhatsAppFloat';
 import { Toaster } from './components/ui/toaster';
 
 const Home = () => (
-  <div className="min-h-screen bg-black text-white">
+  <div className="min-h-screen bg-stone-50 text-zinc-900">
     <Navbar />
     <main>
       <Hero />
