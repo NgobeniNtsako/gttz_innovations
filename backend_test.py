@@ -48,9 +48,9 @@ def log_test(test_name, passed, details=""):
     return passed
 
 def test_existing_endpoint():
-    """Test 6: Verify existing GET /api/ endpoint still works"""
+    """Test 5: Verify existing GET /api/ endpoint still works"""
     print("\n" + "=" * 80)
-    print("TEST 6: Existing GET /api/ endpoint")
+    print("TEST 5: Existing GET /api/ endpoint")
     print("=" * 80)
     
     try:
@@ -80,9 +80,9 @@ def test_existing_endpoint():
         return log_test("GET /api/ endpoint", False, f"Exception: {str(e)}")
 
 def test_valid_submission():
-    """Test 1: Valid contact form submission"""
+    """Test 1: Valid contact form submission with Resend integration"""
     print("\n" + "=" * 80)
-    print("TEST 1: Valid contact form submission")
+    print("TEST 1: Valid contact form submission (Resend integration)")
     print("=" * 80)
     
     payload = {
@@ -90,7 +90,7 @@ def test_valid_submission():
         "email": "test@example.com",
         "phone": "0640000000",
         "service": "General Building",
-        "message": "Hello, I need a quote for my home extension."
+        "message": "Please confirm delivery of this test enquiry from the GTTZ website."
     }
     
     try:
@@ -106,6 +106,8 @@ def test_valid_submission():
         
         if response.status_code == 200:
             data = response.json()
+            
+            # Check required fields
             required_fields = ["ok", "stored", "message", "id"]
             missing_fields = [f for f in required_fields if f not in data]
             
@@ -123,12 +125,45 @@ def test_valid_submission():
                     f"stored=False. Response: {data}"
                 )
             
-            # Both ok=True (email sent) and ok=False (pending activation) are acceptable
-            return log_test(
-                "Valid submission",
-                True,
-                f"Response: {data}. Email sent: {data.get('ok')}"
-            )
+            # For Resend integration, check delivery details
+            if data.get("ok"):
+                # Email was sent successfully
+                delivered_to = data.get("delivered_to", [])
+                email_ids = data.get("email_ids", [])
+                failed_recipients = data.get("failed_recipients", [])
+                
+                # Verify at least zmasilela@gttzinnovations.com was delivered
+                if "zmasilela@gttzinnovations.com" not in delivered_to:
+                    return log_test(
+                        "Valid submission - delivery",
+                        False,
+                        f"Expected zmasilela@gttzinnovations.com in delivered_to. Response: {data}"
+                    )
+                
+                # Verify we have at least one email_id (Resend ID)
+                if not email_ids or len(email_ids) == 0:
+                    return log_test(
+                        "Valid submission - email IDs",
+                        False,
+                        f"Expected at least one email_id. Response: {data}"
+                    )
+                
+                # Note: info@gttzinnovations.com may be in failed_recipients (acceptable)
+                if "info@gttzinnovations.com" in failed_recipients:
+                    print("   Note: info@gttzinnovations.com in failed_recipients (expected - mailbox may not exist)")
+                
+                return log_test(
+                    "Valid submission",
+                    True,
+                    f"Email delivered to {delivered_to}. Email IDs: {email_ids}. Failed: {failed_recipients}"
+                )
+            else:
+                # Email delivery failed for all recipients
+                return log_test(
+                    "Valid submission",
+                    False,
+                    f"ok=False - email delivery failed. Response: {data}"
+                )
         else:
             return log_test(
                 "Valid submission",
@@ -139,14 +174,14 @@ def test_valid_submission():
         return log_test("Valid submission", False, f"Exception: {str(e)}")
 
 def test_validation_error():
-    """Test 2: Validation error - invalid data"""
+    """Test 3: Validation error - invalid data"""
     print("\n" + "=" * 80)
-    print("TEST 2: Validation error (name too short, invalid email, message too short)")
+    print("TEST 3: Validation error (name too short, invalid email, message too short)")
     print("=" * 80)
     
     payload = {
         "name": "X",
-        "email": "invalid",
+        "email": "not-an-email",
         "message": "hi"
     }
     
@@ -177,9 +212,9 @@ def test_validation_error():
         return log_test("Validation error", False, f"Exception: {str(e)}")
 
 def test_missing_required():
-    """Test 3: Missing required fields"""
+    """Test 5: Missing required fields"""
     print("\n" + "=" * 80)
-    print("TEST 3: Missing required fields (only name provided)")
+    print("TEST 5: Missing required fields (only name provided)")
     print("=" * 80)
     
     payload = {
@@ -213,15 +248,15 @@ def test_missing_required():
         return log_test("Missing required fields", False, f"Exception: {str(e)}")
 
 def test_optional_fields():
-    """Test 4: Optional fields (phone and service omitted)"""
+    """Test 2: Optional fields (phone and service omitted)"""
     print("\n" + "=" * 80)
-    print("TEST 4: Optional fields (phone and service omitted)")
+    print("TEST 2: Optional fields (phone and service omitted)")
     print("=" * 80)
     
     payload = {
         "name": "Jane Doe",
         "email": "jane@example.com",
-        "message": "Just enquiring about services with no service selected"
+        "message": "Just enquiring — please deliver."
     }
     
     try:
@@ -237,11 +272,30 @@ def test_optional_fields():
         
         if response.status_code == 200:
             data = response.json()
-            return log_test(
-                "Optional fields",
-                True,
-                f"Successfully accepted submission without phone/service. Response: {data}"
-            )
+            
+            # Check that it has the same structure as valid submission
+            if data.get("ok"):
+                delivered_to = data.get("delivered_to", [])
+                email_ids = data.get("email_ids", [])
+                
+                if "zmasilela@gttzinnovations.com" in delivered_to and len(email_ids) > 0:
+                    return log_test(
+                        "Optional fields",
+                        True,
+                        f"Successfully accepted submission without phone/service. Delivered to: {delivered_to}"
+                    )
+                else:
+                    return log_test(
+                        "Optional fields",
+                        False,
+                        f"Email not delivered properly. Response: {data}"
+                    )
+            else:
+                return log_test(
+                    "Optional fields",
+                    False,
+                    f"ok=False - email delivery failed. Response: {data}"
+                )
         else:
             return log_test(
                 "Optional fields",
@@ -252,9 +306,9 @@ def test_optional_fields():
         return log_test("Optional fields", False, f"Exception: {str(e)}")
 
 def test_mongodb_persistence():
-    """Test 5: Verify MongoDB persistence"""
+    """Test 4: Verify MongoDB persistence with Resend fields"""
     print("\n" + "=" * 80)
-    print("TEST 5: MongoDB persistence check")
+    print("TEST 4: MongoDB persistence check (Resend integration)")
     print("=" * 80)
     
     # First submit a unique message
@@ -296,23 +350,47 @@ def test_mongodb_persistence():
         if record:
             print(f"Found record in MongoDB: {record}")
             
-            # Verify key fields
-            if (record.get("name") == payload["name"] and
-                record.get("email") == payload["email"] and
-                record.get("message") == unique_message):
+            # Verify key fields for Resend integration
+            checks = []
+            checks.append(("name", record.get("name") == payload["name"]))
+            checks.append(("email", record.get("email") == payload["email"]))
+            checks.append(("message", record.get("message") == unique_message))
+            checks.append(("email_sent exists", "email_sent" in record))
+            checks.append(("delivered_to exists", "delivered_to" in record))
+            checks.append(("email_ids exists", "email_ids" in record))
+            
+            # Check if email was sent successfully
+            if record.get("email_sent"):
+                checks.append(("email_sent=True", True))
+                checks.append(("delivered_to populated", len(record.get("delivered_to", [])) > 0))
+                checks.append(("email_ids populated", len(record.get("email_ids", [])) > 0))
                 
+                # Verify zmasilela@gttzinnovations.com is in delivered_to
+                if "zmasilela@gttzinnovations.com" in record.get("delivered_to", []):
+                    checks.append(("zmasilela delivered", True))
+                else:
+                    checks.append(("zmasilela delivered", False))
+            else:
+                checks.append(("email_sent=False", True))
+                # If errors field exists, log it
+                if "errors" in record:
+                    print(f"   Errors captured: {record['errors']}")
+            
+            failed_checks = [name for name, passed in checks if not passed]
+            
+            if not failed_checks:
                 client.close()
                 return log_test(
                     "MongoDB persistence",
                     True,
-                    f"Record successfully stored and verified in contact_messages collection"
+                    f"Record successfully stored with all Resend fields. email_sent={record.get('email_sent')}"
                 )
             else:
                 client.close()
                 return log_test(
                     "MongoDB persistence",
                     False,
-                    f"Record found but data mismatch. Record: {record}"
+                    f"Failed checks: {failed_checks}. Record: {record}"
                 )
         else:
             client.close()
@@ -352,16 +430,16 @@ def print_summary():
     return failed == 0
 
 if __name__ == "__main__":
-    print("Starting GTTZ Innovations Backend API Tests")
+    print("Starting GTTZ Innovations Backend API Tests - Resend Integration")
     print(f"Timestamp: {datetime.now().isoformat()}")
     
-    # Run tests in order
-    test_existing_endpoint()  # Test 6 first to verify basic connectivity
-    test_valid_submission()   # Test 1
-    test_validation_error()   # Test 2
-    test_missing_required()   # Test 3
-    test_optional_fields()    # Test 4
-    test_mongodb_persistence() # Test 5
+    # Run tests in order matching review request
+    test_existing_endpoint()  # Test 5: Sanity check
+    test_valid_submission()   # Test 1: Valid full submission
+    test_optional_fields()    # Test 2: Optional fields omitted
+    test_validation_error()   # Test 3: Validation
+    test_mongodb_persistence() # Test 4: MongoDB persistence
+    test_missing_required()   # Test 5: Missing required (additional)
     
     # Print summary
     all_passed = print_summary()
