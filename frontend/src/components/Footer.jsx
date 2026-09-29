@@ -121,7 +121,15 @@ const Footer = () => {
 
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-zinc-500">
-            © {new Date().getFullYear()} GTTZ Innovations. All rights reserved.
+            © {new Date().getFullYear()} GTTZ Innovations. All rights reserved.{" "}
+            <a
+              href="https://www.frontrowtech.co.za"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-amber-400 transition-colors"
+            >
+              Built by Front Row Tech
+            </a>
           </p>
           <div className="flex items-center gap-6 text-xs text-zinc-500">
             <a href="#" className="hover:text-amber-400 transition-colors">
