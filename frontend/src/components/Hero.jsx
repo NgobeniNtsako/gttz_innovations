@@ -5,9 +5,9 @@ import { COMPANY, WHATSAPP_URL } from '../mock';
 import { Logo } from './Navbar';
 
 const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1590274853856-f22d5ee3d228?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzB8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBhcmNoaXRlY3R1cmUlMjBkYXlsaWdodHxlbnwwfHx8fDE3OTA2OTYxNTZ8MA&ixlib=rb-4.1.0&q=85';
+  'https://images.unsplash.com/photo-1575230167650-dce335edc7f4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzN8MHwxfHNlYXJjaHwzfHxjb25zdHJ1Y3Rpb24lMjBzaXRlJTIwY3JhbmV8ZW58MHx8fHwxNzkwNjk5MzA4fDA&ixlib=rb-4.1.0&q=85';
 const HERO_IMAGE_SIDE =
-  'https://images.unsplash.com/photo-1614595737476-42487331b8a1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzB8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBhcmNoaXRlY3R1cmUlMjBkYXlsaWdodHxlbnwwfHx8fDE3OTA2OTYxNTZ8MA&ixlib=rb-4.1.0&q=85';
+  'https://images.unsplash.com/photo-1527335988388-b40ee248d80c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzN8MHwxfHNlYXJjaHwyfHxjb25zdHJ1Y3Rpb24lMjBzaXRlJTIwY3JhbmV8ZW58MHx8fHwxNzkwNjk5MzA4fDA&ixlib=rb-4.1.0&q=85';
 
 const Hero = () => {
   const scrollTo = (id) => {
